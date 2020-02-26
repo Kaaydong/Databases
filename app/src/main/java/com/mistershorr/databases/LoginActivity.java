@@ -87,6 +87,11 @@ public class LoginActivity extends AppCompatActivity {
             Backendless.UserService.login(username, password, new AsyncCallback<BackendlessUser>() {
                 public void handleResponse(BackendlessUser user) {
                     Toast.makeText(LoginActivity.this,"Welcome " + user.getProperty("username"),Toast.LENGTH_SHORT).show();
+
+                    //change screens using intent
+                    Intent loggedInIntent = new Intent(LoginActivity.this,FriendListActivity.class);
+                            startActivity(loggedInIntent);
+                            finish();
                 }
 
                 public void handleFault(BackendlessFault fault) {

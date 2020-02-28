@@ -18,8 +18,12 @@
             android:parentActivityName=".LoginActivity">
 
         </activity>
+
         <activity android:name=".FriendListActivity"
             android:parentActivityName=".LoginActivity"></activity>
+
+        <activity android:name=".FriendDetailActivity"
+            android:parentActivityName=".FriendListActivity"></activity>
 
         <activity android:name=".LoginActivity">
             <intent-filter>

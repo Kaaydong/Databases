@@ -87,6 +87,12 @@ public class FriendListActivity extends AppCompatActivity {
 
     }
 
+//    @Override
+//    protected void onStart()
+//    {
+//
+//    }
+
     public void wireWidgets()
     {
         listView = findViewById(R.id.listView_listActivity_list);

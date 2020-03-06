@@ -41,9 +41,12 @@ public class FriendDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.frienddetail);
 
+        friend = new Friend(); // get the friend from the extras. if the extra is null, then make the new friend
+        // then set the all the widget values to those of the friend you just pulled up
+
         wireWidgets();
 
-        setListners();
+        setListeners();
 
     }
 
@@ -55,6 +58,8 @@ public class FriendDetailActivity extends AppCompatActivity {
 
         seekBarClumsiness = findViewById(R.id.seekBar_detail_clumsiness);
         seekBarGymFrequency = findViewById(R.id.seekBar_detail_gymFrequency);
+        seekBarClumsiness.setMax(9);
+        seekBarGymFrequency.setMax(9);
 
         switchAwesome = findViewById(R.id.switch_detail_awesome);
         ratingBarTrustworthiness = findViewById(R.id.ratingBar_detail_trust);
@@ -68,11 +73,12 @@ public class FriendDetailActivity extends AppCompatActivity {
     {
         if (allThingsChecked())
         {
+
         friend.setName(editTextName.getText().toString());
-        friend.setClumsiness(seekBarClumsiness.getProgress());
+        friend.setClumsiness(seekBarClumsiness.getProgress()+1);
         friend.setAwesome(switchAwesome.isChecked());
-        friend.setGymFrequency(seekBarGymFrequency.getProgress());
-        friend.setTrustworthiness(ratingBarTrustworthiness.getNumStars());
+        friend.setGymFrequency(seekBarGymFrequency.getProgress()+1);
+        friend.setTrustworthiness(ratingBarTrustworthiness.getProgress());
         friend.setMoneyOwed(Double.valueOf(editTextMoneyOwed.getText().toString()));
     }
         else
@@ -86,24 +92,26 @@ public class FriendDetailActivity extends AppCompatActivity {
     {
         makeFriend();
 
-        // save object synchronously
-        Friend savedFriend = Backendless.Persistence.save( friend );
 
         // save object asynchronously
         Backendless.Persistence.save( friend, new AsyncCallback<Friend>() {
             public void handleResponse( Friend response )
-            {
-                Toast.makeText(FriendDetailActivity.this,"Friend Successfully Added",Toast.LENGTH_SHORT).show();
-            }
+                {
+                    Toast.makeText(FriendDetailActivity.this,"Friend Successfully Added",Toast.LENGTH_SHORT).show();
 
-            public void handleFault( BackendlessFault fault )
-            {
-                Toast.makeText(FriendDetailActivity.this,fault.getMessage(),Toast.LENGTH_SHORT).show();
+                    Intent loggedInIntent = new Intent(FriendDetailActivity.this,FriendListActivity.class);
+                    startActivity(loggedInIntent);
+                    finish();
+                }
+
+                public void handleFault( BackendlessFault fault )
+                {
+                    Toast.makeText(FriendDetailActivity.this,fault.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void setListners()
+    public void setListeners()
     {
         buttonAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,9 +119,6 @@ public class FriendDetailActivity extends AppCompatActivity {
                 if (allThingsChecked()) {
                     saveNewFriend();
 
-                    Intent loggedInIntent = new Intent(FriendDetailActivity.this,FriendListActivity.class);
-                    startActivity(loggedInIntent);
-                    finish();
 
                 }
                 else

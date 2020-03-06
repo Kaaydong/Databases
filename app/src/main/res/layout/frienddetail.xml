@@ -19,6 +19,7 @@
 
     <SeekBar
         android:id="@+id/seekBar_detail_gymFrequency"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="167dp"
         android:layout_height="24dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +28,7 @@
 
     <SeekBar
         android:id="@+id/seekBar_detail_clumsiness"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="167dp"
         android:layout_height="24dp"
         app:layout_constraintBottom_toTopOf="@+id/switch_detail_awesome"

@@ -42,6 +42,8 @@ public class FriendListActivity extends AppCompatActivity {
     private Friend[] friends;
     private FloatingActionButton addButton;
 
+    public static String EXTRA_LIST = "list";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -87,11 +89,39 @@ public class FriendListActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    protected void onStart()
-//    {
-//
-//    }
+    @Override
+    protected void onResume()
+    {
+        String userId = Backendless.UserService.CurrentUser().getObjectId();
+        // ownerId = '23821742184649'
+        String whereClause = "ownerId = '" + userId + "'";
+
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.setWhereClause(whereClause);
+
+        Backendless.Data.of( Friend.class).find(queryBuilder,new AsyncCallback<List<Friend>>(){
+            @Override
+            public void handleResponse( List<Friend> foundFriends )
+            {
+                Log.d("LOADED FRIENDS","handleResponse" + foundFriends.toString());
+
+
+                friendList = foundFriends;
+
+                friendAdapter = new FriendAdapter(friendList);
+                listView.setAdapter(friendAdapter);
+
+                setListeners();
+            }
+            @Override
+            public void handleFault( BackendlessFault fault )
+            {
+                Toast.makeText(FriendListActivity.this,fault.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        super.onResume();
+
+    }
 
     public void wireWidgets()
     {
@@ -106,7 +136,6 @@ public class FriendListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent loggedInIntent = new Intent(FriendListActivity.this,FriendDetailActivity.class);
                 startActivity(loggedInIntent);
-                finish();
             }
         });
 
@@ -114,11 +143,11 @@ public class FriendListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-//                Intent targetIntent = new Intent(.this, .class);
-//
-//
-//                startActivity(targetIntent);
-//                finish();
+                Intent targetIntent = new Intent(FriendListActivity.this, EditFriend.class);
+
+                targetIntent.putExtra(EXTRA_LIST, friendList.get(position));
+
+                startActivity(targetIntent);
             }
         });
     }
@@ -162,8 +191,8 @@ public class FriendListActivity extends AppCompatActivity {
 
 
             textViewName.setText(friendList.get(position).getName());
-            textViewClumsiness.setText(friendList.get(position).getClumsiness()+"");
-            textViewmoneyOwed.setText(friendList.get(position).getMoneyOwed()+"");
+            textViewClumsiness.setText(friendList.get(position).getClumsiness()+"/10 Clumsiness");
+            textViewmoneyOwed.setText("$"+friendList.get(position).getMoneyOwed());
 
 
             return convertView;

@@ -7,15 +7,15 @@ public class Friend implements Parcelable {
 
     private int clumsiness, trustworthiness;
     private double gymFrequency, moneyOwed;
-    private boolean isAwesome; //0 or 1
+    private boolean awesome; //0 or 1
     private String name;
 
     public boolean isAwesome() {
-        return isAwesome;
+        return awesome;
     }
 
     public void setAwesome(boolean awesome) {
-        isAwesome = awesome;
+        this.awesome = awesome;
     }
 
     public String getObjectId() {
@@ -94,7 +94,7 @@ public class Friend implements Parcelable {
         dest.writeInt(this.trustworthiness);
         dest.writeDouble(this.gymFrequency);
         dest.writeDouble(this.moneyOwed);
-        dest.writeByte(this.isAwesome ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.awesome ? (byte) 1 : (byte) 0);
         dest.writeString(this.name);
         dest.writeString(this.objectId);
         dest.writeString(this.ownerId);
@@ -105,7 +105,7 @@ public class Friend implements Parcelable {
         this.trustworthiness = in.readInt();
         this.gymFrequency = in.readDouble();
         this.moneyOwed = in.readDouble();
-        this.isAwesome = in.readByte() != 0;
+        this.awesome = in.readByte() != 0;
         this.name = in.readString();
         this.objectId = in.readString();
         this.ownerId = in.readString();

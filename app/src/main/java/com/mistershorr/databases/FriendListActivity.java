@@ -94,6 +94,7 @@ public class FriendListActivity extends AppCompatActivity {
         });
 
 
+
     }
 
     @Override
@@ -183,6 +184,8 @@ public class FriendListActivity extends AppCompatActivity {
                 targetIntent.putExtra(EXTRA_LIST, friendList.get(position));
 
                 startActivity(targetIntent);
+
+
             }
         });
     }
@@ -192,7 +195,7 @@ public class FriendListActivity extends AppCompatActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_layoutdetailactivity, menu);
+        inflater.inflate(R.menu.menucontext_layoutdetailactivity, menu);
     }
 
     @Override
@@ -200,13 +203,10 @@ public class FriendListActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int index = info.position;
         switch (item.getItemId()) {
-            case R.id.Item_listMenu_sortByMoneyOwed:
-               sortByMoneyOwed();
+            case R.id.delete_contextMenu:
+               deleteContact();
                 return true;
-            case R.id.Item_listMenu_sortByName:
-                sortByName();
 
-                return true;
             default:
                 return super.onContextItemSelected(item);
         }

@@ -72,7 +72,7 @@ public class EditFriend extends AppCompatActivity {
         Log.d("GymFrequency", friend.getGymFrequency()-1 + "");
 
         switchAwesome.setChecked(friend.isAwesome());
-        ratingBarTrustworthiness.setRating(friend.getTrustworthiness());
+        ratingBarTrustworthiness.setProgress(friend.getTrustworthiness());
         editTextName.setText(friend.getName());
         editTextMoneyOwed.setText("" + friend.getMoneyOwed());
     }

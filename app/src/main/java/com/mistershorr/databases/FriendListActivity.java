@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -123,6 +128,34 @@ public class FriendListActivity extends AppCompatActivity {
 
     }
 
+    public void deleteContact()
+    {
+
+//        Backendless.Persistence.save( friendList.get(position), new AsyncCallback<Friend>()
+//        {
+//            public void handleResponse( Friend savedContact )
+//            {
+//                Backendless.Persistence.of( Friend.class ).remove( savedContact,
+//                        new AsyncCallback<Long>()
+//                        {
+//                            public void handleResponse( Long response )
+//                            {
+//
+//                            }
+//                            public void handleFault( BackendlessFault fault )
+//                            {
+//
+//                            }
+//                        } );
+//            }
+//            @Override
+//            public void handleFault( BackendlessFault fault )
+//            {
+//                // an error has occurred, the error code can be retrieved with fault.getCode()
+//            }
+//        });
+    }
+
     public void wireWidgets()
     {
         listView = findViewById(R.id.listView_listActivity_list);
@@ -150,6 +183,37 @@ public class FriendListActivity extends AppCompatActivity {
                 startActivity(targetIntent);
             }
         });
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+        int index = info.position;
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_layoutdetailactivity, item);
+        return true;
+    }
+
+    private void sortByName() {
+        Collections.sort(friendAdapter.friendList, new Comparator<Friend>() {
+            @Override
+            public int compare(Friend friend, Friend t1) {
+
+                return friend.getName().toLowerCase().compareTo(t1.getName().toLowerCase());
+            }
+        });
+        friendAdapter.notifyDataSetChanged();
+    }
+    private void sortByMoneyOwed() {
+        Collections.sort(friendAdapter.friendList, new Comparator<Friend>() {
+            @Override
+            public int compare(Friend friend, Friend t1) {
+
+                return (int)(friend.getMoneyOwed() - t1.getMoneyOwed());
+            }
+        });
+        friendAdapter.notifyDataSetChanged();
     }
 
 
@@ -188,6 +252,7 @@ public class FriendListActivity extends AppCompatActivity {
             TextView textViewName = convertView.findViewById(R.id.textView_friendLayout_name);
             TextView textViewClumsiness = convertView.findViewById(R.id.textView_friendLayout_clumsiness);
             TextView textViewmoneyOwed = convertView.findViewById(R.id.textView_friendLayout_moneyOwed);
+            Button deleteButton = convertView.findViewById(R.id.button_friendLayout_Delete);
 
 
             textViewName.setText(friendList.get(position).getName());

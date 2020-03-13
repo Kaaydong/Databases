@@ -3,7 +3,9 @@ package com.mistershorr.databases;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -186,13 +188,29 @@ public class FriendListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-        int index = info.position;
-
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_layoutdetailactivity, item);
-        return true;
+        inflater.inflate(R.menu.menu_layoutdetailactivity, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int index = info.position;
+        switch (item.getItemId()) {
+            case R.id.Item_listMenu_sortByMoneyOwed:
+               sortByMoneyOwed();
+                return true;
+            case R.id.Item_listMenu_sortByName:
+                sortByName();
+
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+
     }
 
     private void sortByName() {
@@ -252,7 +270,6 @@ public class FriendListActivity extends AppCompatActivity {
             TextView textViewName = convertView.findViewById(R.id.textView_friendLayout_name);
             TextView textViewClumsiness = convertView.findViewById(R.id.textView_friendLayout_clumsiness);
             TextView textViewmoneyOwed = convertView.findViewById(R.id.textView_friendLayout_moneyOwed);
-            Button deleteButton = convertView.findViewById(R.id.button_friendLayout_Delete);
 
 
             textViewName.setText(friendList.get(position).getName());
